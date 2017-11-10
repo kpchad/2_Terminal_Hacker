@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 
 public class Hacker : MonoBehaviour
@@ -57,20 +55,13 @@ public class Hacker : MonoBehaviour
         }
     }
 
-
-
     void RunMainMenu(string input) {
-        if (input == "1"){
-            level = 1;
-            password = level1Passwords[2]; // to do: make random
+        bool isValidLevelNumber = (input == "1" || input == "2");
+        if (isValidLevelNumber){
+            level = int.Parse(input);
             StartGame();
         }
-        else if (input == "2"){
-            level = 2;
-            password = level2Passwords[1]; // to do: make random
-            StartGame();
-        }
-        else if (input == "bandaid"){
+        else if (input == "bandaid"){ // easter egg
             Terminal.WriteLine("bandaids won't fix everything, kid.");
             Terminal.WriteLine("Go to med school.");
         }
@@ -80,17 +71,22 @@ public class Hacker : MonoBehaviour
     }
 
     void StartGame() {
+        print(level1Passwords.Length);
+        print(level2Passwords.Length);
         currentScreen = Screen.Password;
-        Terminal.WriteLine("You have selected level " + level);
-        if (level == 1) {
-            Terminal.WriteLine("enter password:");
+        Terminal.ClearScreen();
+        switch(level){
+            case 1:
+                password = level1Passwords[Random.Range(0, level1Passwords.Length)];
+                break;
+            case 2:
+                password = level2Passwords[Random.Range(0, level2Passwords.Length)];
+                break;
+            default:
+                Debug.LogError("Invalid level number");
+                break;
         }
-        else if (level == 2){
-            Terminal.WriteLine("enter password:");
-        }
-        else {
-            
-        }
+        Terminal.WriteLine("enter password:");
     }
 
     void CheckPassword(string input) {
